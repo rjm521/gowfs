@@ -3,15 +3,15 @@ package gowfs
 import "testing"
 
 func Test_GetNameNodeUrl(t *testing.T) {
-    conf := Configuration{Addr: "localhost:8080", BasePath: "/test/gofs", User: "vvivien", PassWord: "123456"}
+    conf := Configuration{Addr: "localhost:8080", WebHdfsVer: "/gateway/hdfs", BasePath: "/test/gofs", User: "vvivien", PassWord: "123456"}
     u, err := conf.GetNameNodeUrl()
 
     if err != nil {
         t.Fatal(err)
     }
 
-    if u.Scheme != "http" {
-        t.Errorf("Expecting url.Scheme http, but got %s", u.Scheme)
+    if u.Scheme != "https" {
+        t.Errorf("Expecting url.Scheme https, but got %s", u.Scheme)
     }
 
     if u.Host != "localhost:8080" {

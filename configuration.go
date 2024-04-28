@@ -36,7 +36,7 @@ func (conf *Configuration) GetNameNodeUrl() (*url.URL, error) {
         return nil, errors.New("Configuration namenode address not set.")
     }
 
-    var urlStr string = fmt.Sprintf("http://%s%s%s", conf.Addr, conf.WebHdfsVer, conf.BasePath)
+    var urlStr string = fmt.Sprintf("https://%s%s%s", conf.Addr, conf.WebHdfsVer, conf.BasePath)
 
     u, err := url.Parse(urlStr)
     if err != nil {
