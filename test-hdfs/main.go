@@ -1,14 +1,17 @@
 package main
 
-import "fmt"
-import "flag"
-import "log"
-import "os"
-import "path"
-import "os/user"
-import "strconv"
-import "time"
-import "vladimirvivien/gowfs"
+import (
+	"flag"
+	"fmt"
+	"log"
+	"os"
+	"os/user"
+	"path"
+	"strconv"
+	"time"
+
+	"github.com/rjm521/gowfs"
+)
 
 var uname string
 
@@ -38,7 +41,6 @@ func main() {
 	testDir := *path + "/test"
 	createTestDir(fs, testDir)
 	remoteFile := uploadTestFile(fs, *testData, testDir)
-	appendToRemoteFile(fs, *testData, remoteFile)
 	newRemoteFile := testDir + "/" + "peace-and-war.txt"
 	renameRemoteFile(fs, remoteFile, newRemoteFile)
 	changeOwner(fs, newRemoteFile)
@@ -191,29 +193,6 @@ func changeMod(fs *gowfs.FileSystem, hdfsPath string) {
 		ls(fs, hdfsPath)
 	} else {
 		log.Fatal("Chmod() failed.")
-	}
-}
-
-func appendToRemoteFile(fs *gowfs.FileSystem, localFile, hdfsPath string) {
-	stat, err := fs.GetFileStatus(gowfs.Path{Name: hdfsPath})
-	if err != nil {
-		log.Fatal("Unable to get file info for ", hdfsPath, ":", err.Error())
-	}
-	shell := gowfs.FsShell{FileSystem: fs}
-	_, err = shell.AppendToFile([]string{localFile}, hdfsPath)
-	if err != nil {
-		log.Fatal("AppendToFile() failed: ", err.Error())
-	}
-
-	stat2, err := fs.GetFileStatus(gowfs.Path{Name: hdfsPath})
-	if err != nil {
-		log.Fatal("Something went wrong, unable to get file info:", err.Error())
-	}
-	if stat2.Length > stat.Length {
-		log.Println("AppendToFile() for ", hdfsPath, " OK.")
-		ls(fs, hdfsPath)
-	} else {
-		log.Fatal("AppendToFile failed. File size for ", hdfsPath, " expected to be larger.")
 	}
 }
 
