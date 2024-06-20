@@ -1,17 +1,15 @@
 [![Build Status](https://drone.io/github.com/vladimirvivien/gowfs/status.png)](https://drone.io/github.com/vladimirvivien/gowfs/latest)
 
-## gowfs 
-gowfs is a Go bindings for Hadoop HDFS via its WebHDFS interface.  It provides typed access to remote HDFS resources via Go's JSON marshaling system.  gowfs follows the WebHDFS JSON protocol outline in  http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html.  It has been tested with Apache Hadoop 2.x.x - series.
-
-#### GoDoc Package Documentation
-GoDoc documentation - https://godoc.org/github.com/vladimirvivien/gowfs
+## gowfs
+ gowfs 是一个通过 WebHDFS 接口为 Hadoop HDFS 提供 Go 封装的库。支持像操作文件系统一样操作HDFS
+ gowfs 遵循 WebHDFS JSON 协议, 详见：https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html
 
 ### Usage
 ```
-go get github.com/vladimirvivien/gowfs
+go get github.com/rjm521/gowfs
 ```
 ```go
-import github.com/vladimirvivien/gowfs
+import github.com/rjm521/gowfs
 ...
 fs, err := gowfs.NewFileSystem(gowfs.Configuration{Addr: "localhost:50070", User: "hdfs"})
 if err != nil{
@@ -24,31 +22,23 @@ if err != nil {
 fmt.Println (checksum)
 ```
 
-### Run HDFS Test
-To see the API used, see directory `test-hdfs`. Compile and use that code to test against a running  HDFS deployment.  See https://github.com/vladimirvivien/gowfs/tree/master/test-hdfs.
-
-#### HDFS Setup
-* Enable `dfs.webhdfs.enabled` property in your hsdfs-site.xml 
-* Ensure `hadoop.http.staticuser.user` property is set in your core-site.xml.
-
-
 ## API Overview
-gowfs lets you access HDFS resources via two structs `FileSystem` and `FsShell`.  Use FileSystem to get access to low level callse.  FsShell is designed to provide a higer level of abstraction and integration with the local file system.
+gowfs 通过两个结构体 FileSystem 和 FsShell 让你访问 HDFS 资源。使用 FileSystem 进行低级别调用。FsShell 旨在提供更高层次的抽象和与本地文件系统的集成。
 
-### FileSystem API 
+### FileSystem API
 #### Configuration{} Struct
-Use the `Configuration{}` struct to specify paramters for the file system.  You can create configuration either using a `Configuration{}` literal or using `NewConfiguration()` for defaults. 
+Use the `Configuration{}` struct to specify paramters for the file system.  You can create configuration either using a `Configuration{}` literal or using `NewConfiguration()` for defaults.
 
 ```
 conf := *gowfs.NewConfiguration()
 conf.Addr = "localhost:50070"
 conf.User = "hdfs"
 conf.ConnectionTime = time.Second * 15
-conf.DisableKeepAlives = false 
+conf.DisableKeepAlives = false
 ```
 
 #### FileSystem{} Struct
-Create a new `FileSystem{}` struct before you can make call to any functions.  You create the FileSystem by passing in a `Configuration` pointer as shown below. 
+Create a new `FileSystem{}` struct before you can make call to any functions.  You create the FileSystem by passing in a `Configuration` pointer as shown below.
 ```
 fs, err := gowfs.NewFileSystem(conf)
 ```
@@ -173,6 +163,6 @@ ok, err := shell.Chmod([]string{"/remote/hdfs/file/"}, 0744)
 2. No support for kerberos (none plan right now)
 3. No SSL support yet.
 
-### References
+### 参考资料
 1. WebHDFS API - http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html
 2. FileSystemShell - http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/FileSystemShell.html#getmerge
