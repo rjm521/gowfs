@@ -77,6 +77,7 @@ func (fs *FileSystem) Create(
 	}
 
 	req, _ = http.NewRequest("PUT", u.String(), data)
+	req.Header = *header
 	// set content type
 	if contenttype != "" {
 		req.Header.Set("Content-Type", contenttype)
@@ -187,6 +188,7 @@ func (fs *FileSystem) Append(data io.Reader, p Path, buffersize int, contenttype
 	}
 
 	req, _ = http.NewRequest("POST", u.String(), data)
+	req.Header = *header
 	// set content type
 	if contenttype != "" {
 		req.Header.Set("Content-Type", contenttype)
